@@ -1,6 +1,6 @@
 #include "particleFilter.hpp"
 
-#define dim 3
+#define dim 6
 #define nParticles 100
 
 particleFilter::particleFilter()
@@ -13,19 +13,48 @@ particleFilter::particleFilter(float xMaxRange,float yMaxRange, float zMaxRange,
     this->minRange[0] = xMinRange;
     this->minRange[1] = yMinRange;
     this->minRange[2] = zMinRange;
+    this->minRange[3] = -1000;
+    this->minRange[4] = -1000;
+    this->minRange[5] = -1000;
+
     this->maxRange[0] = xMaxRange;
     this->maxRange[1] = yMaxRange;
     this->maxRange[2] = zMaxRange;
+    this->maxRange[3] = 1000;
+    this->maxRange[4] = 1000;
+    this->maxRange[5] = 1000;
+
     this->Range[0] = xMaxRange - xMinRange;
     this->Range[1] = yMaxRange - yMinRange;
     this->Range[2] = zMaxRange - zMinRange;
-    cvInitMatHeader(&this->LB, 3, 1, CV_32FC1, this->minRange);
-    cvInitMatHeader(&this->UB, 3, 1, CV_32FC1, this->maxRange);
+    cvInitMatHeader(&this->LB, 6, 1, CV_32FC1, this->minRange);
+    cvInitMatHeader(&this->UB, 6, 1, CV_32FC1, this->maxRange);
     this->condens = cvCreateConDensation(dim, dim, nParticles);
     cvConDensInitSampleSet(this->condens, &this->LB, &this->UB);
 
     // we're just using a 3x3 identity matrix.
     this->condens->DynamMatr[0] = 1.0;
+    this->condens->DynamMatr[1] = 0.0;
+    this->condens->DynamMatr[2] = 0.0;
+    this->condens->DynamMatr[3] = 1.0;
+    this->condens->DynamMatr[4] = 0.0;
+    this->condens->DynamMatr[5] = 0.0;
+
+    this->condens->DynamMatr[6] = 0.0;
+    this->condens->DynamMatr[7] = 1.0;
+    this->condens->DynamMatr[8] = 0.0;
+    this->condens->DynamMatr[9] = 0.0;
+    this->condens->DynamMatr[10] = 1.0;
+    this->condens->DynamMatr[11] = 0.0;
+
+    this->condens->DynamMatr[12] = 0.0;
+    this->condens->DynamMatr[13] = 0.0;
+    this->condens->DynamMatr[14] = 1.0;
+    this->condens->DynamMatr[15] = 0.0;
+    this->condens->DynamMatr[16] = 0.0;
+    this->condens->DynamMatr[17] = 1.0;
+
+    /* this->condens->DynamMatr[0] = 1.0;
     this->condens->DynamMatr[1] = 0.0;
     this->condens->DynamMatr[2] = 0.0;
 
@@ -35,7 +64,7 @@ particleFilter::particleFilter(float xMaxRange,float yMaxRange, float zMaxRange,
 
     this->condens->DynamMatr[6] = 0.0;
     this->condens->DynamMatr[7] = 0.0;
-    this->condens->DynamMatr[8] = 1.0;
+    this->condens->DynamMatr[8] = 1.0;*/
 }
 
 cv::Point3f particleFilter::filter(float x, float y, float z)

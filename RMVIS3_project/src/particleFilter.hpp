@@ -13,8 +13,8 @@ public:
     cv::Point3f filter(float x, float y, float z);
 
 private:
-    float minRange[3];
-    float maxRange[3];
+    float minRange[6];
+    float maxRange[6];
     float Range[3];
     CvMat LB, UB;
     CvConDensation* condens;
