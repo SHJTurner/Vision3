@@ -1,0 +1,1 @@
+/home/turner/Workspace/RMVIS3/stereo_recorder/CMakeFiles/stereo_recorder.dir
