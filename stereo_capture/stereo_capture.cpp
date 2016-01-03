@@ -6,8 +6,8 @@
 #define IMG_WIDTH 960
 #define IMG_HEIGHT 720
 
-#define cap0dev 1
-#define cap1dev 2
+#define cap0dev 2
+#define cap1dev 1
 
 using namespace std;
 using namespace cv;

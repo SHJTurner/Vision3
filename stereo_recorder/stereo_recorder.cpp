@@ -1,13 +1,14 @@
 #include <thread>
 #include <stdio.h>
+#include <ctime>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
 #define IMG_WIDTH 960
 #define IMG_HEIGHT 720
 
-#define cap0dev 0
-#define cap1dev 1
+#define cap0dev 1
+#define cap1dev 2
 
 using namespace std;
 using namespace cv;
@@ -36,8 +37,8 @@ void threadGrab0(){
         cap0.retrieve(img0);
         Mat Tmp = img0.t(); //Rotate Image
         flip(Tmp,img0,0);
-        //leftImgs.push_back(img0);
-        outputVideocap0.write(img0);
+        leftImgs.push_back(img0);
+        //outputVideocap0.write(img0);
 }
 
 void threadGrab1(){
@@ -45,8 +46,8 @@ void threadGrab1(){
         cap1.retrieve(img1);
         Mat Tmp = img1.t(); //Rotate Image
         flip(Tmp,img1,1);
-        //rightImgs.push_back(img1);
-        outputVideocap1.write(img1);
+        rightImgs.push_back(img1);
+        //outputVideocap1.write(img1);
 }
 
 
@@ -61,8 +62,8 @@ int main(int argc, char** argv ){
     namedWindow("cap0",WINDOW_NORMAL);
     namedWindow("cap1",WINDOW_NORMAL);
 
-    outputVideocap0.open("RecoredVideo/Cam0.avi",CV_FOURCC('M', 'J', 'P', 'G'),20,Size(720,960),true);
-    outputVideocap1.open("RecoredVideo/Cam1.avi",CV_FOURCC('M', 'J', 'P', 'G'),20,Size(720,960),true);
+    outputVideocap0.open("RecoredVideo/Cam0.avi",CV_FOURCC('M', 'J', 'P', 'G'),11,Size(720,960),true);
+    outputVideocap1.open("RecoredVideo/Cam1.avi",CV_FOURCC('M', 'J', 'P', 'G'),11,Size(720,960),true);
     if (!outputVideocap0.isOpened() || !outputVideocap1.isOpened())
     {
             printf("Output video could not be opened\n");
@@ -76,36 +77,39 @@ int main(int argc, char** argv ){
     }
 
     //record video
-    printf("Starting to record video... \n(Press space key to stop)\n");
+    printf("Starting to record video... \n(Press 'c'-key to stop)\n");
     fflush(stdout);
     for(;;){
+            clock_t begin = clock();
             thread Grab0(threadGrab0);
             thread Grab1(threadGrab1);
             Grab0.join();
             Grab1.join();
+            
+	    
 
             char c = (char)waitKey(1);
             if( c == 'c')
                 break;
+
+	    clock_t end = clock();
+	    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	    double fps = 1.0/elapsed_secs;
+	    printf("FPS: %f (Press 'c'-key to stop)\n",fps);
+	    fflush(stdout);
     }
-
-
-
-
-
-   /* for(Mat img : leftImgs)
+    
+    printf("Writeing video to harddrive...");
+    fflush(stdout);
+    for(Mat img : leftImgs)
     {
         outputVideocap0.write(img);
     }
-    if (!outputVideocap1.isOpened())
-    {
-            printf("Output video could not be opened\n");
-            return 0;
-    }
+
     for(Mat img : rightImgs)
     {
         outputVideocap1.write(img);
-    }*/
+    }
     outputVideocap0.release();
     outputVideocap1.release();
 

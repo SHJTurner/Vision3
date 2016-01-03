@@ -1,5 +1,5 @@
 #include "point3dReconstruction.hpp"
-
+//#define printResult
 
 point3dRecontruction::point3dRecontruction() {}
 
@@ -89,6 +89,8 @@ Point3d point3dRecontruction::Calculate3dPoint(Point2f cam1Point, Point2f cam2Po
     cv::triangulatePoints(StereoCam.P1, StereoCam.P2, cam1pnts, cam2pnts, pnts3d); //triangulate 3d point
 
     pnts3d = pnts3d / pnts3d.at<double>(3, 0); //Normalize 3d Point
-    std::cout << "Normalized 3D point: " << pnts3d << std::endl;
+#ifdef printResult
+    std::cout << "Normalized 3D point: " << endl << pnts3d << std::endl;
+#endif
     return Point3d (pnts3d.at<double>(0, 0),pnts3d.at<double>(1, 0),pnts3d.at<double>(2, 0));
 }

@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project( RMVIS3_project )
-#for some reason "-Wl,--no-as-needed" compiler flags are needed (not sure, but i may be a bug in gcc)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -Wl,--no-as-needed")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread -Wl,--no-as-needed") #enable c++11
 find_package( OpenCV REQUIRED )
 find_package( Threads )
 add_executable( RMVIS3_project

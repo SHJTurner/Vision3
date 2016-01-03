@@ -5,7 +5,6 @@ find_package( OpenCV REQUIRED )
 find_package( Threads )
 add_executable( RMVIS3_project
 src/main.cpp
-src/particleFilter.cpp
 src/point3dReconstruction.cpp
 src/imgProc.hpp
 src/imgProc.cpp)
